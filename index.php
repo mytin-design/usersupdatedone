@@ -207,6 +207,88 @@ The 'confirmpass' field itself is not stored in the database. It's only used for
 //INCLUDES WELL DESIGNED ALERT BOXES
 
 
+// require('./connect.php');
+
+// // Function to sanitize user inputs
+// function sanitize_input($input) {
+//     // Implement your sanitization logic here
+//     // For example, you can use mysqli_real_escape_string() or other methods
+//     return htmlspecialchars(trim($input));
+// }
+
+// // Check if form is submitted
+// if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//     $firstname = isset($_POST['firstname']) ? sanitize_input($_POST['firstname']) : '';
+//     $lastname = isset($_POST['lastname']) ? sanitize_input($_POST['lastname']) : '';
+//     $username = isset($_POST['username']) ? sanitize_input($_POST['username']) : '';
+//     $emailpass = isset($_POST['emailpass']) ? sanitize_input($_POST['emailpass']) : '';
+//     $password = isset($_POST['password']) ? sanitize_input($_POST['password']) : '';
+//     $confirmpass = isset($_POST['confirmpass']) ? sanitize_input($_POST['confirmpass']) : '';
+
+//     if ($firstname && $lastname && $username && $emailpass && $password && $confirmpass) {
+//         // Add your database connection logic here if it's not already included
+//         require "./connect.php";
+
+//         // Check if the username already exists in the database
+//         $check_query = "SELECT * FROM users WHERE username=?";
+//         $check_stmt = $connect->prepare($check_query);
+//         $check_stmt->bind_param('s', $username);
+//         $check_stmt->execute();
+//         $result = $check_stmt->get_result();
+
+//         if ($result->num_rows > 0) {
+//             echo "<script>
+//                     alert('Username already exists. Please choose a different username.');
+//                   </script>";
+//         } else {
+//             // Prepare the SQL statement using a prepared statement to prevent SQL injection
+//             $insert_stmt = $connect->prepare("INSERT INTO users (firstname, lastname, username,emailpass, password)  
+//                                             VALUES (?, ?, ?, ?, ?)");
+
+//             // Check if the passwords match before inserting
+//             if ($password === $confirmpass) {
+//                 // Hash the password for secure storage
+//                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+//                 // Bind parameters and execute the query
+//                 $insert_stmt->bind_param('ssss', $firstname, $lastname, $username, $emailpass, $hashed_password);
+//                 $insert_stmt->execute();
+
+//                 // Check if the query was successful
+//                 if ($insert_stmt->affected_rows > 0) {
+//                     echo "<script>
+//                             alert('Registration Successful. Welcome!');
+//                             window.location = 'login.php';
+//                           </script>";
+//                 } else {
+//                     echo "<script>
+//                             alert('Kindly try again');
+//                           </script>";
+//                 }
+//             } else {
+//                 echo "<script>
+//                         alert('Passwords do not match');
+//                       </script>";
+//             }
+
+//             // Close the statement for insertion
+//             $insert_stmt->close();
+//         }
+
+//         // Close the connection and statement for checking username
+//         $check_stmt->close();
+//         $connect->close();
+//     } else {
+//         echo "<script>
+//                 alert('All fields are required');
+//               </script>";
+//     }
+// }
+
+//=====================||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||=====================
+
+//INCLUDE EMAIL 
+
 require('./connect.php');
 
 // Function to sanitize user inputs
@@ -221,10 +303,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $firstname = isset($_POST['firstname']) ? sanitize_input($_POST['firstname']) : '';
     $lastname = isset($_POST['lastname']) ? sanitize_input($_POST['lastname']) : '';
     $username = isset($_POST['username']) ? sanitize_input($_POST['username']) : '';
+    $emailpass = isset($_POST['emailpas']) ? sanitize_input($_POST['emailpas']) : '';
     $password = isset($_POST['password']) ? sanitize_input($_POST['password']) : '';
     $confirmpass = isset($_POST['confirmpass']) ? sanitize_input($_POST['confirmpass']) : '';
 
-    if ($firstname && $lastname && $username && $password && $confirmpass) {
+    if ($firstname && $lastname && $username && $emailpass && $password && $confirmpass) {
         // Add your database connection logic here if it's not already included
         require "./connect.php";
 
@@ -241,8 +324,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                   </script>";
         } else {
             // Prepare the SQL statement using a prepared statement to prevent SQL injection
-            $insert_stmt = $connect->prepare("INSERT INTO users (firstname, lastname, username, password)  
-                                            VALUES (?, ?, ?, ?)");
+            $insert_stmt = $connect->prepare("INSERT INTO users (firstname, lastname, username,emailpass, password)  
+                                            VALUES (?, ?, ?, ?, ?)");
 
             // Check if the passwords match before inserting
             if ($password === $confirmpass) {
@@ -250,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                 // Bind parameters and execute the query
-                $insert_stmt->bind_param('ssss', $firstname, $lastname, $username, $hashed_password);
+                $insert_stmt->bind_param('sssss', $firstname, $lastname, $username, $emailpass, $hashed_password);
                 $insert_stmt->execute();
 
                 // Check if the query was successful
@@ -283,7 +366,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </script>";
     }
 }
-
 
 
 
@@ -320,6 +402,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <p class="studentNamenm">UserName:</p>
                         <input type="text" id="financeIdinput" name="username" class="sflexinp" placeholder="">
                     </div>
+                    <div class="financeIdbx sflex">
+                        <p class="studentNamenm">Email:</p>
+                        <input type="text" id="financeIdinput" name="emailpas" class="sflexinp" placeholder="">
+                    </div>
 
                     <div class="tsurnamebx sflex">
                         <p class="studentNamenm">Password:</p>
@@ -344,6 +430,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="stdActbtns">
                 <div class="stdActbtnsIn">
                     <button id="saveStudent" type="submit" class="stdinfobtn">Register</button>
+                    <a href="./login.php" class="stdinfobta">Login</a>
                 </div>                
             </div>
         </div>

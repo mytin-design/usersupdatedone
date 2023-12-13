@@ -88,6 +88,15 @@
     border: none;
 }
 
+.stdinfobta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    background-color: #eee;
+}
+
 .notif {
     padding: .5pc;
     font-size: 1rem;
